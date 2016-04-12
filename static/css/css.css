@@ -1,0 +1,52 @@
+@import "main.css";
+@import "navigation.css";
+@import "cart.css";
+
+a{
+ color:#98AC5E;
+ font-weight:bold;
+ text-decoration:none;
+}
+a:hover{
+ text-decoration:underline;
+}
+/* category page styles */
+div.product_thumbnail{
+ text-align:center;
+ float:left;
+ width:150px;
+ height:200px;
+}
+/* product page styles */
+div.product_image{
+ float:left;
+ padding:0 10px 10px 0;
+}
+
+ul.errorlist{
+ background-color:Red;color:White;
+}
+
+h3{
+ background-color:#98AC5E;
+ color:White;
+ padding:3px;
+ margin-bottom:6px;
+}
+ul#categories{
+ list-style:none;
+}
+ul#categories li{
+ font-weight:bold;
+ color:#616161;
+}
+ul#categories li a{
+ text-decoration:underline;
+}
+div#footer a{
+ color:White;
+ font-size:small;
+ text-decoration:underline;
+ font-weight:normal;
+ margin-right:10px;
+} 

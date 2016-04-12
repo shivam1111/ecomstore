@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "XHTML1-s.dtd" >
+<html>
+	<head>
+		{% load static %}
+		<link rel="Stylesheet" type="text/css" href="{% static 'css/css.css' %}" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		 <title>
+		 	{% block title %}
+		 		{% if page_title %}
+		 			{{ page_title }} - 
+	 			{% endif %}
+		 		{{ site_name }}
+	 		{% endblock %}</title>
+		 <meta name="keywords" content="{{ meta_keywords }}" />
+		 <meta name="description" content="{{ meta_description }}" /> 		
+	</head>
+	<body>
+		{% block site_wrapper %}
+		
+		{% endblock %} 
+	</body>
+</html>
