@@ -7,6 +7,13 @@ import random
 
 CART_ID_SESSION_KEY = 'cart_id' 
 
+def is_empty(request):
+    return cart_distinct_item_count(request) == 0 
+
+def empty_cart(request):
+    user_cart = get_cart_items(request)
+    user_cart.delete()
+
 # update quantity for single item
 def update_cart(request):
     postdata = request.POST.copy()
@@ -52,6 +59,7 @@ def _generate_cart_id():
     for y in range(cart_id_length):
         cart_id += characters[random.randint(0, len(characters)-1)]
     return cart_id
+
 # return all items from the current user's cart
 def get_cart_items(request):
     return CartItem.objects.filter(cart_id=_cart_id(request)) 

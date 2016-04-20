@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^', include('catalog.urls')), 
     url(r'^admin/', admin.site.urls),
     url(r'^catalog/',preview.home),
-    url(r'^cart/', include('cart.urls')), 
+    url(r'^cart/', include('cart.urls'),{'SSL':False}), 
+    url(r'^checkout/', include('checkout.urls')),
 ]
 
 handler404 = "views.file_not_found_404"

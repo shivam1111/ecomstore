@@ -24,6 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 't6cpfhw54*q70ex1x)20!90a9aol%zyuv0nrg4=5w($ic45!t@'
 
+# Change to true before deploying into production
+ENABLE_SSL = False
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # Basically the host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) should match one of the values in ALLOWED_HOSTS.
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mywebsite.com']
@@ -43,7 +46,20 @@ INSTALLED_APPS = [
     'cart',
     'django.contrib.flatpages',# This is added in order to add static pages in Django
     'django.contrib.sites',# This is added in order to add static pages in Django
+    'checkout',
+    'constance.backends.database',
+    'constance',
+    'bootstrap3'
 ]
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'AUTHNET_POST_URL': ('test.authorize.net', ""),
+    'AUTHNET_POST_PATH':('/gateway/transact.dll',''),
+    'AUTHNET_LOGIN':('6wC7Ww5rT4',''),
+    'AUTHNET_KEY':('33ye388Ju8cGVF3u',''),
+    
+}
 
 SITE_ID = 1 # This is the ID of the site record created in admin
 
@@ -57,6 +73,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware', # Added from Book
+    'SSLMiddleware.SSLRedirect',
 ]
 
 ROOT_URLCONF = 'ecomstore.urls'
@@ -148,3 +165,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# Paypal url
+paypal_sandbox = True
+paypal_sandbox = "https://api.sandbox.paypal.com/v1"
+paypal_live = "https://api.paypal.com/v1" 
+client_id = "ARJpqrOtO1sax98KUUb6pGJjuXociFWtN8WSBdPyQmxnslA-86xVwyUCiowS9ZY0trBH2MikwxNE3dLQ"
+client_secret = "EPIyljPmT5x502wu0J5qsl4julEBzRSonLhX3i-Tc8m14SI6bQX8uJsBuY4-Uu1-bfx4-QMs47_kQm9k"

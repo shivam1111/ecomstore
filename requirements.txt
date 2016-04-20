@@ -1,1 +1,4 @@
 django-db-logger
+django-constance[database] #http://django-constance.readthedocs.org/en/latest/
+django-constance
+django-bootstrap3

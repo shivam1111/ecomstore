@@ -1,6 +1,9 @@
 @import "main.css";
 @import "navigation.css";
 @import "cart.css";
+@import "checkout.css";
+@import "credit_card.css";
+
 
 a{
  color:#98AC5E;
@@ -16,6 +19,11 @@ div.product_thumbnail{
  float:left;
  width:150px;
  height:200px;
+ overflow:hidden;
+}
+img.product_thumbnail{
+	width:140px;
+	height:150px;	
 }
 /* product page styles */
 div.product_image{
