@@ -31,7 +31,12 @@ class Product(models.Model):
     sku = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=9,decimal_places=2)
     old_price = models.DecimalField(max_digits=9,decimal_places=2,blank=True,default=0.00)
-    image = models.CharField(max_length=50) 
+    
+    # Image Fields
+    image = models.ImageField(upload_to='products/main') #MEDIA_ROOT/images/products/main
+    thumbnail = models.ImageField(upload_to='products/thumbnails')
+    image_caption = models.CharField(max_length=200)
+      
     is_active = models.BooleanField(default=True)
     is_bestseller = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)

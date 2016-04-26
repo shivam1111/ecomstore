@@ -51,9 +51,12 @@ def create_order(request,transaction_id):
     order = checkout_form.save(commit=False)
     order.transaction_id = transaction_id 
     order.ip_address = request.META.get('REMOTE_ADDR')
-    order.user = None
     order.status = Order.SUBMITTED
+    order.user = None
+    if request.user.is_authenticated():
+        order.user = request.user 
     order.save()
+    
     # if the order save succeeded 
     if order.pk:
         cart_items = cart.get_cart_items(request)
@@ -67,6 +70,10 @@ def create_order(request,transaction_id):
             oi.save()
         # all set, empty cart
         cart.empty_cart(request)
+        # save profile info for future orders
+    if request.user.is_authenticated():
+        from accounts import profile
+        profile.set(request)
     # return the new order object
     return order    
      

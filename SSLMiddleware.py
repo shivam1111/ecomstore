@@ -4,7 +4,6 @@ SSL = 'SSL'
 
 class SSLRedirect:
     def process_view(self, request, view_func, view_args, view_kwargs):
-        print "====================",request.is_secure()
         if SSL in view_kwargs:
             secure = view_kwargs[SSL]
             del view_kwargs[SSL]

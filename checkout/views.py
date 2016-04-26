@@ -8,7 +8,7 @@ from forms import CheckoutForm
 from models import Order, OrderItem
 import checkout
 from cart import cart
-
+from accounts import profile
 
 def execute_paypal_token(request):
     #Sample URL: http://localhost:8000/cart/?paymentId=PAY-2PX39972HY496933MK4HSDRI&token=EC-41F68379P7654291W&PayerID=DZ233GUZYS6H6
@@ -49,7 +49,11 @@ def show_checkout(request, template_name='checkout/checkout.html'):
         else:
             error_message = 'Correct the errors below'
     else:
-        form = CheckoutForm()
+        if request.user.is_authenticated(): 
+            user_profile = profile.retrieve(request)
+            form = CheckoutForm(instance=user_profile)
+        else:
+            form = CheckoutForm()
     page_title = 'Checkout'
     return render_to_response(template_name, locals(), context_instance=RequestContext(request)) 
 

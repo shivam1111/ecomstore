@@ -14,9 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-
+LOGIN_REDIRECT_URL = '/accounts/my_account/' 
+AUTH_PROFILE_MODULE = 'accounts.userprofile' 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -49,7 +48,8 @@ INSTALLED_APPS = [
     'checkout',
     'constance.backends.database',
     'constance',
-    'bootstrap3'
+    'bootstrap3',
+    'accounts',
 ]
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
@@ -92,7 +92,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.i18n',  # This is extra from book and not by default
-                'django.core.context_processors.media', # This is extra from book and not by default. This passed MEDIA_URL path to tempalte
+                'django.core.context_processors.media', # This is extra from book and not by default. This passed MEDIA_URL path to templte
                 'utils.context_processors.ecomstore', # This is developed on this project from utils app
             ],
         },
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'ecomstore.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 MEDIA_URL = '/static/images/'
- 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

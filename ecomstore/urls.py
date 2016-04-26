@@ -16,7 +16,6 @@ Including another URLconf
 """
 
 
-from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import url,include
 from django.contrib.flatpages import views as flatpageview
@@ -27,6 +26,8 @@ from preview import views as preview
 
 urlpatterns = [
     url(r'^', include('catalog.urls')), 
+    url(r'^accounts/', include('accounts.urls')), 
+    url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^catalog/',preview.home),
     url(r'^cart/', include('cart.urls'),{'SSL':False}), 
