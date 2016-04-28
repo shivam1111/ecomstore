@@ -1,0 +1,6 @@
+#add_review{
+ cursor:pointer;
+}
+.hidden{display:none;}
+.visible{display:block;}
+.new_review{background-color:Pink;} 

@@ -6,16 +6,83 @@ from catalog.models import Category, Product
 from django.template import RequestContext 
 from cart import cart
 from django.http import HttpResponseRedirect
-from catalog.forms import ProductAddToCartForm 
+from catalog.forms import ProductAddToCartForm,ProductReviewForm
+from stats import stats  
+from ecomstore.settings import PRODUCTS_PER_ROW
+from models import Product,ProductReview,Category
+from django.core import serializers 
+from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+import json
+from django.http import HttpResponse
+import tagging 
+from tagging.models import Tag, TaggedItem 
+import json
 
+def tag(request, tag, template_name="catalog/tag.html"):
+    products = TaggedItem.objects.get_by_model(Product.active, tag) 
+    return render_to_response(template_name, locals(),context_instance=RequestContext(request)) 
+
+def tag_cloud(request, template_name="catalog/tag_cloud.html"): 
+    product_tags = Tag.objects.cloud_for_model(Product, steps=9,distribution=tagging.utils.LOGARITHMIC,filters={ 'is_active': True }) 
+    page_title = 'Product Tag Cloud' 
+    return render_to_response(template_name, locals(),context_instance=RequestContext(request)) 
+
+@login_required 
+def add_tag(request): 
+    tags = request.POST.get('tag','') 
+    slug = request.POST.get('slug','') 
+    if len(tags) > 2: 
+        p = Product.active.get(slug=slug) 
+        html = u'' 
+        template = "catalog/tag_link.html" 
+        for tag in tags.split(): 
+            tag.strip(',') 
+            Tag.objects.add_tag(p,tag) 
+        for tag in p.tags: 
+            html += render_to_string(template, {'tag': tag }) 
+        response = json.dumps({'success':'True', 'html': html }) 
+    else: 
+        response = json.dumps({'success':'False'}) 
+    return HttpResponse(response,content_type='application/json') 
+
+@login_required
+def add_review(request):
+    form = ProductReviewForm(request.POST)
+    response = {}
+    if form.is_valid(): 
+        review = form.save(commit=False)
+        slug = request.POST.get('slug')
+        product = Product.active.get(slug=slug)
+        review.user = request.user
+        review.product = product
+        review.save()
+        template = "catalog/product_review.html"
+        html = render_to_string(template, {'review': review })
+        response = json.dumps({'success':'True', 'html': html})
+    else:
+        html = form.errors.as_ul()
+        response = json.dumps({'success':'False', 'html': html})
+    return HttpResponse(response,content_type="application/json")         
+
+
+def get_json_products(request):
+    products = Product.active.all()
+    json_products = serializers.serialize("json", products)
+    return HttpResponse(json_products,content_type='application/javascript; charset=utf-8') 
+  
 def index(request, template_name="catalog/index.html"):
+    search_recs = stats.recommended_from_search(request)
+    featured = Product.featured.all()[0:PRODUCTS_PER_ROW]
+    recently_viewed = stats.get_recently_viewed(request)
+    view_recs = stats.recommended_from_views(request)
     page_title = 'Musical Instruments and Sheet Music for Musicians'
     # locals() it returns a dictioanary of local variables if you have local variables 
     return render_to_response(template_name, locals(),context_instance = RequestContext(request))
 
 def show_category(request, category_slug, template_name="catalog/category.html"):
     c = get_object_or_404(Category, slug=category_slug)
-    products = c.product_set.all()
+    products = c.product_set.filter(is_active=True)
     page_title = c.name
     meta_keywords = c.meta_keywords
     meta_description = c.meta_description  
@@ -27,6 +94,9 @@ def show_product(request, product_slug, template_name="catalog/product.html"):
     page_title = p.name
     meta_keywords = p.meta_keywords
     meta_description = p.meta_description
+    stats.log_product_view(request, p) # add to product view
+    product_reviews = ProductReview.approved.filter(product=p).order_by('-date') 
+    review_form = ProductReviewForm()  
     if request.method == 'POST':
         # add to cart…create the bound form
         postdata = request.POST.copy()

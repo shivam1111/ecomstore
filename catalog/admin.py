@@ -1,6 +1,14 @@
 from django.contrib import admin
 from .models import Category,Product
 from .forms import ProductAdminForm 
+from models import Product, Category, ProductReview
+
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'title', 'date', 'rating', 'is_approved')
+    list_per_page = 20
+    list_filter = ('product', 'user', 'is_approved')
+    ordering = ['date']
+    search_fields = ['user','content','title']
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
@@ -29,4 +37,5 @@ class CategoryAdmin(admin.ModelAdmin):
     # sets up slug to be generated from category name
     prepopulated_fields = {'slug' : ('name',)}
 
-admin.site.register(Category, CategoryAdmin)      
+admin.site.register(Category, CategoryAdmin)     
+admin.site.register(ProductReview, ProductReviewAdmin) 

@@ -4,6 +4,9 @@
 @import "checkout.css";
 @import "credit_card.css";
 @import "accounts.css";
+@import "catalog.css";
+@import "tag.css";
+@import "loading.css";
 
 a{
  color:#98AC5E;

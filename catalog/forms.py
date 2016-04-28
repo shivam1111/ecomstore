@@ -1,5 +1,10 @@
 from django import forms
-from .models import Product
+from .models import Product,ProductReview
+
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        exclude = ('user','product', 'is_approved') 
 
 class ProductAdminForm(forms.ModelForm):
     class Meta:

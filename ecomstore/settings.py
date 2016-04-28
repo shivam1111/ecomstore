@@ -16,6 +16,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGIN_REDIRECT_URL = '/accounts/my_account/' 
 AUTH_PROFILE_MODULE = 'accounts.userprofile' 
+PRODUCTS_PER_PAGE = 10
+PRODUCTS_PER_ROW = 4 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -29,7 +31,7 @@ ENABLE_SSL = False
 # SECURITY WARNING: don't run with debug turned on in production!
 # Basically the host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) should match one of the values in ALLOWED_HOSTS.
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mywebsite.com']
-DEBUG=True
+DEBUG = True if os.environ.get('LOCAL_DEBUG',True) else False 
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,6 +52,9 @@ INSTALLED_APPS = [
     'constance',
     'bootstrap3',
     'accounts',
+    'search',
+    'stats',
+    'tagging'
 ]
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
@@ -172,3 +177,8 @@ paypal_sandbox = "https://api.sandbox.paypal.com/v1"
 paypal_live = "https://api.paypal.com/v1" 
 client_id = "ARJpqrOtO1sax98KUUb6pGJjuXociFWtN8WSBdPyQmxnslA-86xVwyUCiowS9ZY0trBH2MikwxNE3dLQ"
 client_secret = "EPIyljPmT5x502wu0J5qsl4julEBzRSonLhX3i-Tc8m14SI6bQX8uJsBuY4-Uu1-bfx4-QMs47_kQm9k"
+
+try: 
+    from settings_local import * 
+except ImportError: 
+    pass 
